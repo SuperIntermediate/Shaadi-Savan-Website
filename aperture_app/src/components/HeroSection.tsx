@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown, Pause, Play } from 'lucide-react';
 import { SectionId } from '../types/experience';
-import { api } from '../services/api';
+import { HERO_CONFIG } from '../data/portfolioContent';
 import { TextEffect } from './ui/text-effect';
 
 interface HeroSectionProps {
@@ -20,15 +20,23 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [heroData, setHeroData] = useState(initialHeroData || null);
+  const [heroData, setHeroData] = useState(initialHeroData || HERO_CONFIG);
 
   useEffect(() => {
-    if (!initialHeroData) {
-      api.public.getHero().then((res) => {
-        if (res) setHeroData(res);
-      }).catch((e) => console.log('Hero fallback to default', e));
+    if (initialHeroData) {
+      setHeroData(initialHeroData);
     }
   }, [initialHeroData]);
+
+  const togglePlay = () => {
+    setIsPlaying((prev) => {
+      const next = !prev;
+      window.dispatchEvent(
+        new CustomEvent('shaadi:toggle-ambient-reel', { detail: { playing: next } })
+      );
+      return next;
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,15 +53,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const totalFrames = heroData?.framesCount || 300;
-  const currentFrame = Math.min(totalFrames, Math.max(1, Math.round(scrollProgress * (totalFrames - 1)) + 1));
-  const secondsTotal = Math.floor(currentFrame / 24);
-  const framesMod = currentFrame % 24;
-  const timecode = `00:00:${String(secondsTotal).padStart(2, '0')}:${String(framesMod).padStart(2, '0')}`;
-
-  const headline = heroData?.headline || "Some moments last a second.\nSome last forever.";
-  const supportingText = heroData?.supportingText || "We capture the stories that stay with you.";
-  const locationText = heroData?.locationText || heroData?.address || "Shaadi-Savan Atelier · Mumbai & Udaipur";
+  const headline = heroData?.headline || HERO_CONFIG.headline;
+  const supportingText = heroData?.supportingText || HERO_CONFIG.supportingText;
+  const locationText = heroData?.locationText || (heroData as any)?.address || HERO_CONFIG.locationText;
 
   return (
     <section
@@ -122,7 +124,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
           <div className="absolute right-6 sm:right-10 lg:right-14 bottom-8 sm:bottom-10 flex items-center gap-3 pointer-events-auto bg-black/60 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/15 shadow-xl">
             <button
               type="button"
-              onClick={() => setIsPlaying((prev) => !prev)}
+              onClick={togglePlay}
               aria-label={isPlaying ? 'Pause ambient reel' : 'Play ambient reel'}
               className="w-8 h-8 rounded-full border border-white/20 bg-black/60 inline-flex items-center justify-center text-[#C6A875] hover:border-[#C6A875] transition-colors cursor-pointer shadow-md"
             >
@@ -133,14 +135,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
               )}
             </button>
 
-            <div className="flex flex-col items-end gap-1.5 font-mono">
+            <div className="flex flex-col items-end gap-1 font-mono">
               <span className="text-[11.5px] text-[#F3EBDD] font-medium tabular-nums drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                {timecode}
+                {HERO_CONFIG.duration || '02:45'} · Cinema Reel
               </span>
-              <div className="w-20 sm:w-28 h-[3px] bg-white/25 rounded-full overflow-hidden">
+              <div className="w-24 sm:w-28 h-[3px] bg-white/25 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[#C6A875] transition-[width] duration-75"
-                  style={{ width: `${Math.max(5, scrollProgress * 100)}%` }}
+                  style={{ width: `${Math.max(8, scrollProgress * 100)}%` }}
                 />
               </div>
             </div>

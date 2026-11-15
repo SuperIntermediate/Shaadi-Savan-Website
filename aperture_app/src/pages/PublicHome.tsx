@@ -11,7 +11,16 @@ import { ServicesSection } from '../components/ServicesSection';
 import { StoriesSection } from '../components/StoriesSection';
 import { StoryLightboxModal } from '../components/StoryLightboxModal';
 import { TestimonialsSection } from '../components/TestimonialsSection';
-import { WEDDING_FILMS } from '../data/experience';
+import {
+  HERO_CONFIG,
+  PHILOSOPHY_CONFIG,
+  FEATURED_STORIES,
+  CINEMATIC_FILMS,
+  SERVICES_CONFIG,
+  MOMENTS_CHAPTERS,
+  TESTIMONIALS_CONFIG,
+  STUDIO_SETTINGS,
+} from '../data/portfolioContent';
 import { FeaturedStory, SectionId, WeddingFilm } from '../types/experience';
 import { api } from '../services/api';
 
@@ -19,19 +28,19 @@ export const PublicHome: React.FC = () => {
   const [activeSection, setActiveSection] = useState<SectionId>('hero');
   const [isScrolledPastHero, setIsScrolledPastHero] = useState(false);
   const [activeStory, setActiveStory] = useState<FeaturedStory | null>(null);
-  const [selectedFilm, setSelectedFilm] = useState<WeddingFilm>(WEDDING_FILMS[0]);
+  const [selectedFilm, setSelectedFilm] = useState<WeddingFilm>(CINEMATIC_FILMS[0] as any);
   const [playerFilm, setPlayerFilm] = useState<WeddingFilm | null>(null);
   const [preselectedService, setPreselectedService] = useState<string | undefined>(undefined);
 
-  // Dynamic backend data state
-  const [heroData, setHeroData] = useState<any>(null);
-  const [philosophyData, setPhilosophyData] = useState<any>(null);
-  const [stories, setStories] = useState<any[]>([]);
-  const [services, setServices] = useState<any[]>([]);
-  const [chapters, setChapters] = useState<any[]>([]);
-  const [films, setFilms] = useState<any[]>([]);
-  const [testimonials, setTestimonials] = useState<any[]>([]);
-  const [settingsData, setSettingsData] = useState<any>(null);
+  // Instantaneous self-contained portfolio state
+  const [heroData, setHeroData] = useState<any>(HERO_CONFIG);
+  const [philosophyData, setPhilosophyData] = useState<any>(PHILOSOPHY_CONFIG);
+  const [stories, setStories] = useState<any[]>(FEATURED_STORIES);
+  const [services, setServices] = useState<any[]>(SERVICES_CONFIG);
+  const [chapters, setChapters] = useState<any[]>(MOMENTS_CHAPTERS);
+  const [films, setFilms] = useState<any[]>(CINEMATIC_FILMS);
+  const [testimonials, setTestimonials] = useState<any[]>(TESTIMONIALS_CONFIG);
+  const [settingsData, setSettingsData] = useState<any>(STUDIO_SETTINGS);
 
   useEffect(() => {
     // Force starting from the top on page load/refresh

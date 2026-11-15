@@ -1,4 +1,4 @@
-# Netlify Configuration for Shaadi-Savan
+# Netlify Configuration for Shaadi-Savan Client Portfolio
 
 [build]
   base = "aperture_app"
@@ -8,7 +8,6 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
-  VITE_API_URL = "https://shaadi-savan-website.onrender.com/api"
 
 # Security Headers
 [[headers]]
@@ -18,21 +17,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# 1. API Reverse Proxy -> Render Backend
-[[redirects]]
-  from = "/api/*"
-  to = "https://shaadi-savan-website.onrender.com/api/:splat"
-  status = 200
-  force = true
-
-# 2. Uploads Reverse Proxy -> Render Backend
-[[redirects]]
-  from = "/uploads/*"
-  to = "https://shaadi-savan-website.onrender.com/uploads/:splat"
-  status = 200
-  force = true
-
-# 3. SPA Fallback for React Router (Prevents 404 on refresh)
+# SPA Fallback for React Router (Prevents 404 on refresh)
 [[redirects]]
   from = "/*"
   to = "/index.html"

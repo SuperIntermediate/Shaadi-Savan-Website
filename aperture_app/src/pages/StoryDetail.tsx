@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { api } from '../services/api';
+import { FEATURED_STORIES } from '../data/portfolioContent';
 import { LightboxModal } from '../components/LightboxModal';
 
 interface WeddingStory {
@@ -32,25 +33,16 @@ interface WeddingStory {
 export const StoryDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [story, setStory] = useState<WeddingStory | null>(null);
-  const [loading, setLoading] = useState(true);
+  const initialStory = FEATURED_STORIES.find((s) => s.slug === slug || s.id === slug) || FEATURED_STORIES[0];
+  const [story, setStory] = useState<any>(initialStory);
+  const [loading, setLoading] = useState(false);
   const [activePhoto, setActivePhoto] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchStory = async () => {
-      try {
-        setLoading(true);
-        if (slug) {
-          const data = await api.public.getStoryBySlug(slug);
-          setStory(data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch story:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchStory();
+    const found = FEATURED_STORIES.find((s) => s.slug === slug || s.id === slug);
+    if (found) {
+      setStory(found);
+    }
     window.scrollTo(0, 0);
   }, [slug]);
 
