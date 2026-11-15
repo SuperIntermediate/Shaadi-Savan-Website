@@ -4,6 +4,7 @@ import {
   Check,
   Clapperboard,
   Film,
+  MapPin,
   RotateCcw,
   Save,
   Upload,
@@ -19,6 +20,7 @@ export const AdminHero: React.FC = () => {
   // Form states
   const [headline, setHeadline] = useState('');
   const [supportingText, setSupportingText] = useState('');
+  const [locationText, setLocationText] = useState('');
   const [posterUrl, setPosterUrl] = useState('');
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [framesCount, setFramesCount] = useState(300);
@@ -32,6 +34,7 @@ export const AdminHero: React.FC = () => {
           setHero(res.data);
           setHeadline(res.data.headline || '');
           setSupportingText(res.data.supportingText || '');
+          setLocationText(res.data.locationText || res.data.address || 'Shaadi-Savan Atelier · Mumbai & Udaipur');
           setPosterUrl(res.data.posterUrl || '');
           setAspectRatio(res.data.aspectRatio || '16:9');
           setFramesCount(res.data.framesCount || 300);
@@ -53,6 +56,7 @@ export const AdminHero: React.FC = () => {
       const res = await api.admin.updateHero({
         headline,
         supportingText,
+        locationText,
         posterUrl,
         aspectRatio,
         framesCount: Number(framesCount),
@@ -164,9 +168,15 @@ export const AdminHero: React.FC = () => {
                 {headline || 'Some moments last a second. Some last forever.'}
               </h1>
             </div>
-            <p className="text-[13px] text-[#F3EBDD]/90 max-w-[320px] drop-shadow-sm">
-              {supportingText || 'We capture the stories that stay with you.'}
-            </p>
+            <div className="max-w-[340px] space-y-1">
+              <p className="text-[11px] uppercase tracking-wider text-[#C6A875] font-mono font-medium drop-shadow-sm flex items-center gap-1.5">
+                <MapPin className="w-3 h-3 text-[#C6A875] shrink-0" />
+                <span>{locationText || 'Shaadi-Savan Atelier · Mumbai & Udaipur'}</span>
+              </p>
+              <p className="text-[13px] text-[#F3EBDD]/90 drop-shadow-sm">
+                {supportingText || 'We capture the stories that stay with you.'}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -224,6 +234,26 @@ export const AdminHero: React.FC = () => {
               placeholder="We capture the stories that stay with you."
               className="w-full px-4 py-3 rounded-xl bg-black/50 border border-[#754C3D]/60 text-white text-[14px] focus:border-[#C6A875] focus:outline-none"
             />
+          </div>
+
+          <div>
+            <label className="block text-[12px] uppercase tracking-wider text-[#C6A875] mb-2 font-medium flex items-center justify-between">
+              <span>Hero Studio Atelier Address &amp; Location Tag</span>
+              <span className="text-neutral-500 font-normal lowercase text-[11px]">e.g. Shaadi-Savan Atelier · Mumbai &amp; Udaipur</span>
+            </label>
+            <div className="relative">
+              <MapPin className="w-4 h-4 text-[#C6A875] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                value={locationText}
+                onChange={(e) => setLocationText(e.target.value)}
+                placeholder="Shaadi-Savan Atelier · Mumbai & Udaipur"
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-black/50 border border-[#754C3D]/60 text-white text-[14px] focus:border-[#C6A875] focus:outline-none"
+              />
+            </div>
+            <p className="mt-1 text-[11.5px] text-neutral-500">
+              Displays directly above the supporting narrative copy in the lower-left overlay of the Hero video reel.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">

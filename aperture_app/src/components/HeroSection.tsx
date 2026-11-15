@@ -9,6 +9,8 @@ interface HeroSectionProps {
   heroData?: {
     headline?: string;
     supportingText?: string;
+    locationText?: string;
+    address?: string;
     videoUrl?: string;
     framesCount?: number;
   };
@@ -51,6 +53,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
 
   const headline = heroData?.headline || "Some moments last a second.\nSome last forever.";
   const supportingText = heroData?.supportingText || "We capture the stories that stay with you.";
+  const locationText = heroData?.locationText || heroData?.address || "Shaadi-Savan Atelier · Mumbai & Udaipur";
 
   return (
     <section
@@ -89,7 +92,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
           {/* Supporting Copy: Lower-Left */}
           <div className="absolute left-6 sm:left-10 lg:left-14 bottom-8 sm:bottom-10 max-w-[300px] sm:max-w-[380px] pointer-events-auto bg-black/40 backdrop-blur-sm p-4 rounded-xl border border-white/10 shadow-xl">
             <p className="text-[12px] tracking-[0.14em] uppercase text-[#C6A875] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] font-mono font-semibold">
-              Shaadi-Savan Atelier · Mumbai &amp; Udaipur
+              {locationText}
             </p>
             <TextEffect
               as="p"
