@@ -8,6 +8,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
+  VITE_API_URL = "https://shaadi-savan-website.onrender.com/api"
 
 # Security Headers
 [[headers]]

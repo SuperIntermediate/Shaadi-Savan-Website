@@ -1,4 +1,8 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const envUrl = import.meta.env.VITE_API_URL;
+// Resilient API base: defaults to Render production backend and fixes any legacy typo URL
+const API_BASE = (envUrl && !envUrl.includes('shaadi-savan-api'))
+  ? envUrl
+  : 'https://shaadi-savan-website.onrender.com/api';
 
 export function getAuthToken() {
   return localStorage.getItem('shaadi_admin_token') || '';
