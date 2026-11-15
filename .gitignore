@@ -1,23 +1,22 @@
 # Dependencies
 node_modules/
-aperture_app/node_modules/
+**/node_modules/
 
 # Build artifacts
 dist/
 build/
-aperture_app/dist/
+**/dist/
 
-# Large archive files & redundant backups
-*.zip
-*.tar.gz
-aperture_app.zip
-aperture.shop.zip
-wedding_video_frames_30fps.zip
-wedding_video_frames_30fps/
-new_aperture/
+# Large archive files & root redundant folders
+/*.zip
+/*.tar.gz
+/wedding_video_frames_30fps/
+/new_aperture/
 
-# Environment variables & secrets
-.env*
+# Environment files & secrets
+.env
+.env.local
+.env.production
 !.env.example
 *.log
 .DS_Store

@@ -1,0 +1,6 @@
+{
+  "name": "Aperture.shop",
+  "description": "Capture Authentic Moments — Curated vintage analog cameras and precision optical gear.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

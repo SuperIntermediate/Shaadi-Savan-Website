@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frame Scroll Animation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      background-color: #000000;
+      color: #ffffff;
+      /* Ensure native vertical scrolling is active */
+      overflow-y: scroll;
+    }
+
+    body {
+      background-color: #000000;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+    }
+
+    /* Elegant dark scrollbar so scroll position is clear and draggable */
+    html::-webkit-scrollbar {
+      width: 10px;
+    }
+    html::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    html::-webkit-scrollbar-thumb {
+      background: #2e2e2e;
+      border-radius: 5px;
+      border: 2px solid #0a0a0a;
+    }
+    html::-webkit-scrollbar-thumb:hover {
+      background: #555555;
+    }
+
+    /* Physical spacer in document flow to create natural 600vh scroll height */
+    #scroll-spacer {
+      width: 100%;
+      height: 600vh;
+      display: block;
+    }
+
+    /* Fixed full-screen viewport for canvas */
+    #viewport {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <!-- Fixed display layer -->
+  <div id="viewport">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <!-- Real in-flow scroll track -->
+  <div id="scroll-spacer"></div>
+
+  <script>
+    (function () {
+      // Force page to always start at the top on reload/refresh
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+      window.scrollTo(0, 0);
+      window.addEventListener('beforeunload', function() {
+        window.scrollTo(0, 0);
+      });
+
+      const TOTAL_FRAMES = 300;
+      const FRAME_DIR = 'wedding_video_frames_30fps';
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+
+      function getFrameUrl(i) {
+        const padded = String(i).padStart(6, '0');
+        return `${FRAME_DIR}/frame_${padded}.jpg`;
+      }
+
+      const frames = new Array(TOTAL_FRAMES + 1);
+      const isLoaded = new Array(TOTAL_FRAMES + 1).fill(false);
+      let lastDrawnFrame = -1;
+
+      // Maintain crisp rendering across Retina/High-DPI displays
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(window.innerWidth * dpr);
+        canvas.height = Math.round(window.innerHeight * dpr);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        if (lastDrawnFrame > 0) {
+          drawFrame(lastDrawnFrame, true);
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+
+      // Aspect cover drawing (no black letterbox bars on 16:9, fills viewport)
+      function drawFrame(index, force = false) {
+        let frameIndex = Math.max(1, Math.min(TOTAL_FRAMES, Math.round(index)));
+
+        // If target frame not yet loaded, find nearest available frame
+        if (!isLoaded[frameIndex]) {
+          let nearest = -1;
+          let minDistance = Infinity;
+          for (let i = 1; i <= TOTAL_FRAMES; i++) {
+            if (isLoaded[i]) {
+              const dist = Math.abs(i - frameIndex);
+              if (dist < minDistance) {
+                minDistance = dist;
+                nearest = i;
+              }
+            }
+          }
+          if (nearest !== -1) {
+            frameIndex = nearest;
+          }
+        }
+
+        if (!isLoaded[frameIndex] && !force) return;
+        if (frameIndex === lastDrawnFrame && !force) return;
+
+        const img = frames[frameIndex];
+        if (!img || img.naturalWidth === 0) return;
+
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const imgRatio = img.naturalWidth / img.naturalHeight;
+        const canvasRatio = cw / ch;
+
+        let dw, dh, dx, dy;
+
+        if (canvasRatio > imgRatio) {
+          dw = cw;
+          dh = cw / imgRatio;
+          dx = 0;
+          dy = (ch - dh) / 2;
+        } else {
+          dh = ch;
+          dw = ch * imgRatio;
+          dx = (cw - dw) / 2;
+          dy = 0;
+        }
+
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.drawImage(img, dx, dy, dw, dh);
+        lastDrawnFrame = frameIndex;
+      }
+
+      // Priority load Frame 1 immediately
+      const firstImg = new Image();
+      firstImg.src = getFrameUrl(1);
+      frames[1] = firstImg;
+
+      firstImg.onload = () => {
+        isLoaded[1] = true;
+        resizeCanvas();
+        drawFrame(1, true);
+      };
+
+      // Background progressive frame loader
+      function preloadAllFrames() {
+        const queue = [];
+        // Phase 1: Keyframe stride (every 4th frame) for rapid responsiveness
+        for (let i = 4; i <= TOTAL_FRAMES; i += 4) {
+          if (i !== 1) queue.push(i);
+        }
+        // Phase 2: All intermediate frames
+        for (let i = 2; i <= TOTAL_FRAMES; i++) {
+          if (i % 4 !== 0) queue.push(i);
+        }
+
+        const maxConcurrent = 10;
+        let active = 0;
+        let queueIdx = 0;
+
+        function fetchNext() {
+          if (queueIdx >= queue.length) return;
+          const idx = queue[queueIdx++];
+          active++;
+
+          const img = new Image();
+          img.src = getFrameUrl(idx);
+          frames[idx] = img;
+
+          const onDone = () => {
+            isLoaded[idx] = true;
+            active--;
+            // If the newly loaded frame is closer to current target than what is currently drawn, refresh
+            const targetFrame = Math.round(1 + currentProgress * (TOTAL_FRAMES - 1));
+            if (Math.abs(targetFrame - idx) < Math.abs(targetFrame - lastDrawnFrame)) {
+              drawFrame(targetFrame);
+            }
+            fetchNext();
+          };
+
+          img.onload = onDone;
+          img.onerror = onDone;
+
+          if (active < maxConcurrent && queueIdx < queue.length) {
+            fetchNext();
+          }
+        }
+
+        for (let i = 0; i < maxConcurrent; i++) {
+          fetchNext();
+        }
+      }
+
+      preloadAllFrames();
+
+      // Scroll progress tracking
+      let targetProgress = 0;
+      let currentProgress = 0;
+
+      function updateScrollProgress() {
+        const docElem = document.documentElement;
+        const body = document.body;
+        const scrollY = window.pageYOffset || docElem.scrollTop || body.scrollTop || 0;
+        const scrollHeight = Math.max(docElem.scrollHeight, body.scrollHeight);
+        const maxScroll = Math.max(1, scrollHeight - window.innerHeight);
+
+        targetProgress = Math.max(0, Math.min(1, scrollY / maxScroll));
+      }
+
+      // Event listeners for all input types
+      window.addEventListener('scroll', updateScrollProgress, { passive: true });
+      window.addEventListener('wheel', updateScrollProgress, { passive: true });
+      window.addEventListener('touchmove', updateScrollProgress, { passive: true });
+      window.addEventListener('keydown', (e) => {
+        if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'].includes(e.key)) {
+          requestAnimationFrame(updateScrollProgress);
+        }
+      });
+
+      // 60FPS render loop with smooth linear interpolation (LERP)
+      function renderLoop() {
+        const delta = targetProgress - currentProgress;
+        if (Math.abs(delta) > 0.0001) {
+          currentProgress += delta * 0.15;
+        } else {
+          currentProgress = targetProgress;
+        }
+
+        const targetFrame = 1 + currentProgress * (TOTAL_FRAMES - 1);
+        drawFrame(targetFrame);
+
+        requestAnimationFrame(renderLoop);
+      }
+
+      // Initialize
+      resizeCanvas();
+      updateScrollProgress();
+      requestAnimationFrame(renderLoop);
+    })();
+  </script>
+</body>
+</html>
