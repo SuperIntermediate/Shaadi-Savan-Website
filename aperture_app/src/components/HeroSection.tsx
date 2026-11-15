@@ -57,6 +57,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
   const supportingText = heroData?.supportingText || HERO_CONFIG.supportingText;
   const locationText = heroData?.locationText || (heroData as any)?.address || HERO_CONFIG.locationText;
 
+  const totalFrames = 300;
+  const currentFrame = Math.min(totalFrames, Math.max(1, Math.round(scrollProgress * (totalFrames - 1)) + 1));
+  const secondsTotal = Math.floor(currentFrame / 24);
+  const framesMod = currentFrame % 24;
+  const timecode = `00:00:${String(secondsTotal).padStart(2, '0')}:${String(framesMod).padStart(2, '0')}`;
+
   return (
     <section
       id="hero"
@@ -135,14 +141,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
               )}
             </button>
 
-            <div className="flex flex-col items-end gap-1 font-mono">
+            <div className="flex flex-col items-end gap-1.5 font-mono">
               <span className="text-[11.5px] text-[#F3EBDD] font-medium tabular-nums drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                {HERO_CONFIG.duration || '02:45'} · Cinema Reel
+                {timecode} (Frame {currentFrame}/{totalFrames})
               </span>
-              <div className="w-24 sm:w-28 h-[3px] bg-white/25 rounded-full overflow-hidden">
+              <div className="w-24 sm:w-32 h-[3px] bg-white/25 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[#C6A875] transition-[width] duration-75"
-                  style={{ width: `${Math.max(8, scrollProgress * 100)}%` }}
+                  style={{ width: `${Math.max(5, scrollProgress * 100)}%` }}
                 />
               </div>
             </div>
