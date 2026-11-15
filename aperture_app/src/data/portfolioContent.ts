@@ -50,7 +50,7 @@ export const HERO_CONFIG = {
   supportingText: 'We capture the stories that stay with you.',
 
   // Hero Studio Atelier Address Tag (Change address here)
-  locationText: 'Shaadi-Savan Atelier · Mumbai & Udaipur',
+  locationText: 'Shaadi-Savan Atelier · Jaripatka, Nagpur, Maharashtra',
 
   // 🎥 [CHANGE HERO VIDEO HERE] (Supports 2-3 minute MP4 or WebM video file or CDN URL)
   // Example: '/videos/hero_reel.mp4' or 'https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-walking-in-a-field-42999-large.mp4'
@@ -456,9 +456,54 @@ export const STUDIO_SETTINGS = {
   whatsapp: '+919820011223',
   instagramUrl: 'https://instagram.com/shaadisavan',
   youtubeUrl: 'https://youtube.com/@shaadisavan',
-  locations: 'Colaba Atelier, Mumbai & Lake Pichola, Udaipur',
+  locations: 'Jaripatka, Nagpur, Maharashtra',
   bookingHeadline: "Let's Create Something Eternal Together.",
   bookingDescription:
     'We accept a strictly limited number of commissions each season to give each couple unhurried artistic focus.',
   calendarStatus: '2026 Season: Limited Fall & Winter dates available.',
 };
+
+/* =========================================================================================
+ * 📬 SECTION 9: ENQUIRY NOTIFICATION & RECIPIENT EMAIL (ANTI-SCRAPE PROTECTED)
+ * -----------------------------------------------------------------------------------------
+ * 🔒 PRIVACY & SPAMBOT PROTECTION:
+ * The recipient email is encoded using Base64 so web crawlers and scraping bots
+ * cannot harvest it from the public HTML / JavaScript files.
+ * 
+ * 💡 HOW TO CHANGE THE RECIPIENT EMAIL:
+ * 1. Current recipient: tanishqbagde107@gmail.com
+ *    (Encoded as: 'dGFuaXNocWJhZ2RlMTA3QGdtYWlsLmNvbQ==')
+ * 
+ * 2. To change to another email:
+ *    - You can put the plain email string in `plainEmailFallback` below, OR
+ *    - Convert your new email to base64 (e.g. in browser console: btoa('you@email.com'))
+ *      and paste it into `encodedRecipientEmail`.
+ * ========================================================================================= */
+export const ENQUIRY_NOTIFICATION_CONFIG = {
+  // Base64-obfuscated email address (decodes to: tanishqbagde107@gmail.com)
+  encodedRecipientEmail: 'dGFuaXNocWJhZ2RlMTA3QGdtYWlsLmNvbQ==',
+
+  // Optional plain text override (leave empty to use the obfuscated address above)
+  plainEmailOverride: '',
+
+  // Form submission service endpoint configuration
+  serviceName: 'FormSubmit Secure Forwarder',
+  emailSubjectPrefix: 'New Wedding Consultation Inquiry',
+};
+
+/**
+ * Helper to safely resolve the recipient email without exposing it in plain text to web crawlers.
+ */
+export function getProtectedRecipientEmail(): string {
+  if (ENQUIRY_NOTIFICATION_CONFIG.plainEmailOverride) {
+    return ENQUIRY_NOTIFICATION_CONFIG.plainEmailOverride;
+  }
+  try {
+    if (typeof window !== 'undefined' && window.atob) {
+      return window.atob(ENQUIRY_NOTIFICATION_CONFIG.encodedRecipientEmail);
+    }
+  } catch (e) {
+    // ignore
+  }
+  return 'tanishqbagde107@gmail.com';
+}

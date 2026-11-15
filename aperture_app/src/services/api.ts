@@ -20,6 +20,7 @@ import {
   MOMENTS_CHAPTERS,
   TESTIMONIALS_CONFIG,
   STUDIO_SETTINGS,
+  getProtectedRecipientEmail,
 } from '../data/portfolioContent';
 
 export const api = {
@@ -85,8 +86,11 @@ export const api = {
       return arr;
     },
 
-    // Save consultation inquiries locally without requiring a backend server
+    // Dispatch consultation inquiries directly to recipient email while keeping it protected
     submitEnquiry: async (payload: any) => {
+      const recipientEmail = getProtectedRecipientEmail();
+
+      // 1. Always store locally in browser so no enquiry is ever lost
       try {
         const stored = JSON.parse(
           localStorage.getItem('shaadi_client_enquiries') || '[]'
@@ -94,12 +98,45 @@ export const api = {
         stored.unshift({
           ...payload,
           id: `SS-${Date.now()}`,
+          recipient: recipientEmail,
           submittedAt: new Date().toISOString(),
         });
         localStorage.setItem('shaadi_client_enquiries', JSON.stringify(stored));
       } catch (err) {
         console.warn('LocalStorage save warning:', err);
       }
+
+      // 2. Transmit directly to recipient email via FormSubmit AJAX service
+      try {
+        const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify({
+            _subject: `New Wedding Consultation Inquiry — Shaadi-Savan: ${payload.clientName || 'Couple'}`,
+            _template: 'table',
+            _captcha: 'false',
+            'Couple Names': payload.clientName || 'N/A',
+            'Client Email': payload.email || 'N/A',
+            'Phone / WhatsApp': payload.phone || 'N/A',
+            'Wedding Date': payload.weddingDate || 'N/A',
+            'Venue / Location': payload.location || 'N/A',
+            'Selected Collection': payload.service || 'N/A',
+            'Personal Notes / Message': payload.message || 'N/A',
+            'Submission Time': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+          }),
+        });
+
+        if (response.ok) {
+          const resData = await response.json().catch(() => ({}));
+          return { success: true, message: 'Enquiry emailed successfully.', data: resData };
+        }
+      } catch (netErr) {
+        console.warn('Direct email transmission notice (saved locally):', netErr);
+      }
+
       return { success: true, message: 'Enquiry received successfully.' };
     },
   },

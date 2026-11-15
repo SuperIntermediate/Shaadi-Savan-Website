@@ -63,7 +63,7 @@ export const BookingFooterSection: React.FC<BookingFooterSectionProps> = ({
   const rawWhatsapp = settingsData?.whatsapp || '+91 98200 11223';
   const cleanWhatsapp = rawWhatsapp.replace(/[^0-9]/g, '');
   const locations =
-    settingsData?.locations || 'Colaba Atelier, Mumbai & Lake Pichola, Udaipur';
+    settingsData?.locations || 'Jaripatka, Nagpur, Maharashtra';
   const headline =
     settingsData?.bookingHeadline || "Let's Create Something Eternal Together.";
   const description =
@@ -301,7 +301,7 @@ export const BookingFooterSection: React.FC<BookingFooterSectionProps> = ({
                           </h3>
                         </div>
                         <p className="text-[14.5px] text-[#F3EBDD]/90 max-w-[44ch] mx-auto leading-relaxed">
-                          Our producers in Mumbai &amp; Udaipur will review your dates ({weddingDate || 'upcoming celebration'}) and reply directly to <span className="text-[#C6A875] font-mono">{email}</span> within 24 hours.
+                          Our producers in Jaripatka, Nagpur will review your dates ({weddingDate || 'upcoming celebration'}) and reply directly to <span className="text-[#C6A875] font-mono">{email}</span> within 24 hours.
                         </p>
                         <div className="pt-4">
                           <button

@@ -86,7 +86,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               Date Availability Request Logged
             </h3>
             <p className="mt-3 text-[14.5px] text-[#F3EBDD] leading-relaxed max-w-[42ch] mx-auto">
-              Thank you, {coupleNames}. Our lead producers in Mumbai &amp; Udaipur will review {weddingDate} ({selectedPackage}) and respond to {email} within 24 hours.
+              Thank you, {coupleNames}. Our lead producers in Jaripatka, Nagpur will review {weddingDate} ({selectedPackage}) and respond to {email} within 24 hours.
             </p>
             <button
               type="button"

@@ -34,7 +34,7 @@ export const AdminHero: React.FC = () => {
           setHero(res.data);
           setHeadline(res.data.headline || '');
           setSupportingText(res.data.supportingText || '');
-          setLocationText(res.data.locationText || res.data.address || 'Shaadi-Savan Atelier · Mumbai & Udaipur');
+          setLocationText(res.data.locationText || res.data.address || 'Shaadi-Savan Atelier · Jaripatka, Nagpur, Maharashtra');
           setPosterUrl(res.data.posterUrl || '');
           setAspectRatio(res.data.aspectRatio || '16:9');
           setFramesCount(res.data.framesCount || 300);

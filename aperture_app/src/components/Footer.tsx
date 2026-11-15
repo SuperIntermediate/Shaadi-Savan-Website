@@ -22,7 +22,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onBookShoot }) => {
             Shaadi-Savan
           </a>
           <p className="mt-1 text-[13px] text-neutral-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-            Documentary Wedding Photography &amp; Cinema · Mumbai &amp; Udaipur
+            Documentary Wedding Photography &amp; Cinema · Jaripatka, Nagpur, Maharashtra
           </p>
         </div>
 
