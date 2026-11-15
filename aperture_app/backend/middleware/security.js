@@ -219,6 +219,11 @@ export function getCorsOptions() {
         }
       }
 
+      // Always allow Shaadi-Savan Netlify frontend and netlify preview deploys
+      if (origin.endsWith('.netlify.app') || origin === 'https://shaadisavan-website.netlify.app') {
+        return callback(null, true);
+      }
+
       // Check configured allowed origins
       if (configuredOrigins.length > 0) {
         if (configuredOrigins.includes(origin) || configuredOrigins.includes('*')) {

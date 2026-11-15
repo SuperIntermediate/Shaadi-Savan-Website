@@ -79,6 +79,22 @@ app.use('/api/auth', authRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/admin', adminRoutes);
 
+// Root informative endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'Shaadi-Savan Backend API',
+    frontend: 'https://shaadisavan-website.netlify.app',
+    message: 'Shaadi-Savan Express API is live and connected to MongoDB Atlas.',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth/login',
+      public: '/api/public/data',
+      admin: '/api/admin',
+    },
+  });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({
