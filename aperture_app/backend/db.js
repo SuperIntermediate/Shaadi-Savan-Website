@@ -48,7 +48,7 @@ export async function connectDB(uri) {
           await SiteStore.findOneAndUpdate(
             { key: 'main_store' },
             { key: 'main_store', data: localData, updatedAt: new Date() },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
           );
 
           // Seed individual collections for Atlas CRM view
