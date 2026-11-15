@@ -135,9 +135,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
 
             <div className="flex flex-col items-end gap-1.5 font-mono">
               <span className="text-[11.5px] text-[#F3EBDD] font-medium tabular-nums drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                {timecode} (Frame {currentFrame}/{totalFrames})
+                {timecode}
               </span>
-              <div className="w-24 sm:w-32 h-[3px] bg-white/25 rounded-full overflow-hidden">
+              <div className="w-20 sm:w-28 h-[3px] bg-white/25 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[#C6A875] transition-[width] duration-75"
                   style={{ width: `${Math.max(5, scrollProgress * 100)}%` }}
