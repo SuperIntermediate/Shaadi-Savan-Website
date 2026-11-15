@@ -54,6 +54,7 @@ export const BookingFooterSection: React.FC<BookingFooterSectionProps> = ({
     preselectedService || AGENCY_SERVICES[0].title,
   );
   const [notes, setNotes] = useState('');
+  const [honeypot, setHoneypot] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedRef, setSubmittedRef] = useState<string | null>(null);
 
@@ -93,6 +94,7 @@ export const BookingFooterSection: React.FC<BookingFooterSectionProps> = ({
         weddingType: 'Heritage Wedding',
         service,
         message: notes,
+        website_hp: honeypot,
       });
       const refId = `SS-${Math.floor(1000 + Math.random() * 9000)}`;
       setSubmittedRef(refId);
@@ -331,6 +333,19 @@ export const BookingFooterSection: React.FC<BookingFooterSectionProps> = ({
 
                         {/* Inquiry Form */}
                         <form onSubmit={handleSubmit} className="space-y-4">
+                          {/* Anti-bot security honeypot */}
+                          <div className="hidden" aria-hidden="true" style={{ display: 'none' }}>
+                            <label htmlFor="website_hp">Leave this field blank</label>
+                            <input
+                              id="website_hp"
+                              type="text"
+                              name="website_hp"
+                              tabIndex={-1}
+                              autoComplete="off"
+                              value={honeypot}
+                              onChange={(e) => setHoneypot(e.target.value)}
+                            />
+                          </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                               <label className="block text-[11.5px] text-[#C6A875] font-mono font-bold uppercase tracking-wider mb-1">

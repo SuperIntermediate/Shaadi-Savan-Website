@@ -17,6 +17,15 @@ build/
 .env
 .env.local
 .env.production
+.env*.local
 !.env.example
+
+# Database Backups & Temporary files
+**/data/backups/
+*.backup
+*.tmp*
+
+# Logs & OS artifacts
 *.log
 .DS_Store
+Thumbs.db

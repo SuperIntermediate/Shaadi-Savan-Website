@@ -28,6 +28,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const handleExpired = () => {
+      setUser(null);
+      setAuthToken('');
+    };
+    window.addEventListener('auth:expired', handleExpired);
+    return () => window.removeEventListener('auth:expired', handleExpired);
+  }, []);
+
+  useEffect(() => {
     const token = getAuthToken();
     if (!token) {
       setIsLoading(false);

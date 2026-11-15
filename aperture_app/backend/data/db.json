@@ -24,7 +24,7 @@
     "calendarStatus": "2026 Season: Limited Fall and Winter dates available."
   },
   "hero": {
-    "headline": "Some moments last a second.\nSome last forever.",
+    "headline": "Valid Headline",
     "supportingText": "We capture the stories that stay with you.",
     "videoUrl": "/wedding_video_frames_30fps/frame_000001.jpg",
     "posterUrl": "/assets/images/wedding_udaipur_palace_1794571321843.jpg",
@@ -32,7 +32,7 @@
     "duration": "00:00:12:12",
     "framesCount": 300,
     "isPublished": true,
-    "lastUpdated": "2026-11-14T13:05:10.701Z"
+    "lastUpdated": "2026-11-15T09:40:06.572Z"
   },
   "philosophy": {
     "number": "02",
@@ -342,6 +342,32 @@
     }
   ],
   "enquiries": [
+    {
+      "id": "enq-1794735606566",
+      "clientName": "Priya & Rohan",
+      "email": "priya.rohan@example.com",
+      "phone": "+91 98200 55555",
+      "weddingDate": "Dec 2026",
+      "location": "",
+      "weddingType": "Heritage Wedding",
+      "service": "Full Heritage Commission",
+      "message": "Looking for heirloom photography.",
+      "status": "New",
+      "submittedAt": "2026-11-15T09:40:06.566Z"
+    },
+    {
+      "id": "enq-1794735606540",
+      "clientName": "[object Object]",
+      "email": "attacker@example.com",
+      "phone": "",
+      "weddingDate": "",
+      "location": "",
+      "weddingType": "Heritage Wedding",
+      "service": "Full Heritage Commission",
+      "message": "",
+      "status": "New",
+      "submittedAt": "2026-11-15T09:40:06.540Z"
+    },
     {
       "id": "enq-101",
       "clientName": "Sunaina & Vivaan Kapur",
