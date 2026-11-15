@@ -1,21 +1,19 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
-
 import { connectDB, readLocalDB, writeLocalDB } from './db.js';
 import { getInitialSeedData } from './seedData.js';
 import authRoutes from './routes/auth.js';
 import publicRoutes from './routes/public.js';
 import adminRoutes from './routes/admin.js';
 import {
-  configureCors,
-  configureHelmet,
-  apiLimiter,
-  sanitizeInputs,
-  secureErrorHandler,
+  securityHeaders,
+  apiRateLimiter,
+  sanitizeInput,
+  getCorsOptions,
 } from './middleware/security.js';
 
 dotenv.config();
@@ -25,33 +23,28 @@ const __dirname = path.dirname(__filename);
 const PUBLIC_DIR = path.resolve(__dirname, '../public');
 
 const app = express();
-const PORT = process.env.BACKEND_PORT || process.env.PORT || 5000;
+const PORT = process.env.BACKEND_PORT || 5000;
 
-// Trust proxy for rate limiting behind reverse proxies (Nginx, Render, Railway, Cloudflare)
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
-}
+// 1. Security: Disable Express fingerprinting
+app.disable('x-powered-by');
 
-// 1. Security Headers (Helmet with strict CSP)
-app.use(configureHelmet());
+// 2. Security: Apply OWASP HTTP Security Headers
+app.use(securityHeaders);
 
-// 2. Strict CORS with production allowlist
-app.use(configureCors());
+// 3. Security: Hardened CORS configuration
+app.use(cors(getCorsOptions()));
 
-// 3. Cookie parser for HttpOnly session authentication
-app.use(cookieParser());
-
-// 4. Request body size limits (2MB to mitigate Denial of Service)
+// 4. Security: Safe payload size limits (prevents Memory Exhaustion DoS)
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
-// 5. NoSQL injection & input sanitization
-app.use(sanitizeInputs);
+// 5. Security: Input sanitization & anti-XSS filter
+app.use(sanitizeInput);
 
-// 6. Global API Rate Limiting
-app.use('/api', apiLimiter);
+// 6. Security: Global API Rate Limiter
+app.use('/api', apiRateLimiter);
 
-// 7. Static uploads directory with cache control & security options
+// 7. Security: Static uploads directory with strict headers
 const UPLOADS_DIR = path.join(PUBLIC_DIR, 'uploads');
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -59,37 +52,15 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 app.use(
   '/uploads',
   express.static(UPLOADS_DIR, {
-    maxAge: '7d',
     setHeaders: (res) => {
       res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Content-Disposition', 'inline');
+      res.setHeader('Cache-Control', 'public, max-age=86400');
     },
   })
 );
 
-// 8. Health check endpoint (Safe for uptime monitors without exposing internal infrastructure)
-app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    uptime: Math.floor(process.uptime()),
-    environment: process.env.NODE_ENV || 'development',
-  });
-});
-
-// 9. Mount API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/public', publicRoutes);
-app.use('/api/admin', adminRoutes);
-
-// 10. 404 Handler for undefined API routes
-app.use('/api', (req, res) => {
-  res.status(404).json({ error: 'The requested API endpoint was not found.' });
-});
-
-// 11. Centralized Safe Error Handler
-app.use(secureErrorHandler);
-
-// Initialize Database & Seed Data
+// Initialize Seed Data if missing
 async function initializeDatabase() {
   await connectDB(process.env.MONGODB_URI);
   let db = readLocalDB();
@@ -103,11 +74,46 @@ async function initializeDatabase() {
   }
 }
 
-// Start Server
-initializeDatabase().then(() => {
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[API Server] Secure API listening on http://localhost:${PORT}`);
+// Mount Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/public', publicRoutes);
+app.use('/api/admin', adminRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    service: 'Shaadi-Savan Backend API',
+    environment: process.env.NODE_ENV || 'development',
+    time: new Date().toISOString(),
   });
 });
 
-export default app;
+// 404 Handler for undefined API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({ error: 'Endpoint not found.' });
+});
+
+// 8. Security: Production-safe Error Handling (Never leak internal stack traces)
+app.use((err, req, res, next) => {
+  console.error('[Server Error]', err);
+
+  const isProduction = process.env.NODE_ENV === 'production';
+  const statusCode = err.status || err.statusCode || 500;
+  const message = isProduction && statusCode === 500
+    ? 'Internal Server Error. Please contact support.'
+    : err.message || 'Internal Server Error';
+
+  res.status(statusCode).json({
+    error: message,
+    ...(isProduction ? {} : { stack: err.stack }),
+  });
+});
+
+// Start Server
+initializeDatabase().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`[API Server] Live on http://localhost:${PORT}`);
+    console.log(`[Security] OWASP headers, rate-limiting, CORS, and sanitization active.`);
+  });
+});

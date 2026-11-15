@@ -28,16 +28,11 @@ async function request(endpoint: string, options: RequestInit = {}) {
 
   const response = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
-    credentials: 'include',
     headers,
   });
 
-  const data = await response.json().catch(() => ({}));
+  const data = await response.json();
   if (!response.ok) {
-    if (response.status === 401 && endpoint !== '/auth/login') {
-      setAuthToken('');
-      window.dispatchEvent(new CustomEvent('auth:expired'));
-    }
     throw new Error(data.error || 'Request failed');
   }
 

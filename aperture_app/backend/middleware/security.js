@@ -1,179 +1,238 @@
-import helmet from 'helmet';
-import cors from 'cors';
-import rateLimit from 'express-rate-limit';
+import crypto from 'crypto';
 
-// Allowed origins parser
-export function getCorsOrigins() {
-  const envOrigins = process.env.ALLOWED_ORIGINS || process.env.CLIENT_URL;
-  if (envOrigins) {
-    return envOrigins.split(',').map((o) => o.trim()).filter(Boolean);
-  }
-  // Default development origins
-  return [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://localhost:5000',
-  ];
-}
+/**
+ * In-memory sliding window rate limiter
+ * Tracks requests per client IP without requiring external Redis in single-instance mode.
+ */
+class RateLimiter {
+  constructor(windowMs, maxRequests, message = 'Too many requests, please try again later.') {
+    this.windowMs = windowMs;
+    this.maxRequests = maxRequests;
+    this.message = message;
+    this.hits = new Map();
 
-// Configured CORS middleware
-export function configureCors() {
-  const allowedOrigins = getCorsOrigins();
-
-  return cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server) in development
-      if (!origin) {
-        return callback(null, true);
-      }
-      if (allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
-        return callback(null, true);
-      }
-      return callback(new Error(`CORS blocked for origin: ${origin}`));
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-    exposedHeaders: ['Set-Cookie'],
-    maxAge: 86400, // 24 hours
-  });
-}
-
-// Configured Helmet security headers
-export function configureHelmet() {
-  const isProd = process.env.NODE_ENV === 'production';
-
-  return helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"], // required for Vite dev / inline hydration
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
-        imgSrc: [
-          "'self'",
-          'data:',
-          'blob:',
-          'https://res.cloudinary.com',
-          'https://images.unsplash.com',
-        ],
-        mediaSrc: ["'self'", 'blob:', 'https://res.cloudinary.com'],
-        connectSrc: ["'self'", 'http://localhost:5000', 'http://localhost:3000', ...getCorsOrigins()],
-        frameSrc: ["'none'"],
-        objectSrc: ["'none'"],
-        baseUri: ["'self'"],
-        formAction: ["'self'"],
-        upgradeInsecureRequests: isProd ? [] : null,
-      },
-    },
-    crossOriginEmbedderPolicy: false, // allow loading media across local dev
-    crossOriginResourcePolicy: { policy: 'cross-origin' }, // allow images/video streaming to frontend
-    dnsPrefetchControl: { allow: false },
-    frameguard: { action: 'deny' },
-    hsts: isProd
-      ? {
-          maxAge: 31536000,
-          includeSubDomains: true,
-          preload: true,
+    // Periodically clean up expired IPs every 2 minutes
+    this.cleanupInterval = setInterval(() => {
+      const now = Date.now();
+      for (const [ip, record] of this.hits.entries()) {
+        if (now - record.resetTime > this.windowMs) {
+          this.hits.delete(ip);
         }
-      : false,
-    ieNoOpen: true,
-    noSniff: true,
-    referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
-    xssFilter: true,
-  });
-}
+      }
+    }, 120000);
 
-// Global API rate limiter
-export const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200, // 200 requests per window
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    error: 'Too many requests from this IP. Please try again after 15 minutes.',
-  },
-});
-
-// Authentication rate limiter (brute-force defense)
-export const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // max 5 attempts per window
-  standardHeaders: true,
-  legacyHeaders: false,
-  skipSuccessfulRequests: false,
-  message: {
-    error: 'Too many failed login attempts. Account access is temporarily locked. Please try again in 15 minutes.',
-  },
-});
-
-// Public Inquiry submission rate limiter (anti-spam)
-export const enquiryLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // max 10 inquiries per IP per 15 minutes
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: {
-    error: 'Too many inquiry submissions from this connection. Please wait a few minutes before submitting again.',
-  },
-});
-
-// Deep recursive NoSQL injection sanitization (removes keys starting with $ or containing .)
-export function sanitizeNoSql(obj) {
-  if (!obj || typeof obj !== 'object') return obj;
-
-  if (Array.isArray(obj)) {
-    return obj.map(sanitizeNoSql);
-  }
-
-  const clean = {};
-  for (const [key, value] of Object.entries(obj)) {
-    // Strip keys starting with $ or containing . (MongoDB operator injection vectors)
-    if (key.startsWith('$') || key.includes('.')) {
-      console.warn(`[Security Alert] Stripped forbidden parameter key: ${key}`);
-      continue;
+    // Prevent interval from keeping Node process alive on exit
+    if (this.cleanupInterval.unref) {
+      this.cleanupInterval.unref();
     }
-    clean[key] = sanitizeNoSql(value);
   }
-  return clean;
+
+  middleware() {
+    return (req, res, next) => {
+      const ip =
+        req.headers['x-forwarded-for']?.split(',')[0].trim() ||
+        req.socket.remoteAddress ||
+        'unknown_ip';
+
+      const now = Date.now();
+      let record = this.hits.get(ip);
+
+      if (!record || now > record.resetTime) {
+        record = { count: 1, resetTime: now + this.windowMs };
+        this.hits.set(ip, record);
+      } else {
+        record.count++;
+      }
+
+      const timeLeft = Math.max(0, Math.ceil((record.resetTime - now) / 1000));
+      res.setHeader('X-RateLimit-Limit', this.maxRequests);
+      res.setHeader('X-RateLimit-Remaining', Math.max(0, this.maxRequests - record.count));
+      res.setHeader('X-RateLimit-Reset', timeLeft);
+
+      if (record.count > this.maxRequests) {
+        res.setHeader('Retry-After', timeLeft);
+        return res.status(429).json({
+          error: this.message,
+          retryAfterSeconds: timeLeft,
+        });
+      }
+
+      next();
+    };
+  }
 }
 
-// Middleware to sanitize req.body, req.query, req.params
-export function sanitizeInputs(req, res, next) {
-  if (req.body) {
-    req.body = sanitizeNoSql(req.body);
+/**
+ * 1. Rate Limiters
+ */
+// General API Rate Limiter: 120 requests per minute
+export const apiRateLimiter = new RateLimiter(
+  60 * 1000,
+  120,
+  'Too many API requests from this connection. Please slow down.'
+).middleware();
+
+// Strict Login Rate Limiter: 5 failed attempts per 15 minutes
+export const loginRateLimiter = new RateLimiter(
+  15 * 60 * 1000,
+  5,
+  'Too many failed login attempts. For security, access is temporarily locked. Please wait 15 minutes.'
+).middleware();
+
+// Public Inquiry Submission Limiter: 5 submissions per 10 minutes (Anti-Spam Bot)
+export const enquiryRateLimiter = new RateLimiter(
+  10 * 60 * 1000,
+  5,
+  'Too many inquiries submitted from this device. Please wait before submitting another.'
+).middleware();
+
+/**
+ * 2. HTTP Security Headers
+ * Applies OWASP recommended HTTP response headers to harden against XSS, clickjacking, MIME-sniffing, etc.
+ */
+export function securityHeaders(req, res, next) {
+  // Prevent MIME type sniffing
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+
+  // Prevent Clickjacking (framing)
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+
+  // Enable XSS filter
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+
+  // Control referrer information leakage
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  // Permissions Policy (disables unnecessary hardware access)
+  res.setHeader(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), payment=(), usb=()'
+  );
+
+  // Cross-Origin isolation protections
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+
+  // HSTS (HTTP Strict Transport Security) in production
+  if (process.env.NODE_ENV === 'production' || req.secure || req.headers['x-forwarded-proto'] === 'https') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
   }
-  if (req.query) {
-    req.query = sanitizeNoSql(req.query);
+
+  // Content Security Policy (allows required fonts, media, and styles)
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' https:; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "font-src 'self' https://fonts.gstatic.com data:; " +
+    "img-src 'self' data: blob: https:; " +
+    "media-src 'self' data: blob: https:; " +
+    "connect-src 'self' https: http:; " +
+    "frame-ancestors 'self'; " +
+    "base-uri 'self'; " +
+    "form-action 'self';"
+  );
+
+  next();
+}
+
+/**
+ * 3. Input Sanitization & Anti-XSS Helper
+ * Recursively strips script tags, HTML event handlers, and dangerous javascript: URIs.
+ */
+export function sanitizeString(val) {
+  if (typeof val !== 'string') return val;
+
+  return val
+    // Remove null bytes
+    .replace(/\0/g, '')
+    // Remove script tags and contents
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    // Strip on* event attributes (like onerror=, onclick=)
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+    .replace(/on\w+\s*=\s*[^>\s]+/gi, '')
+    // Remove javascript: and data: URIs in input text
+    .replace(/javascript\s*:/gi, 'blocked_uri:')
+    // Strip dangerous tags (iframe, object, embed)
+    .replace(/<\/?(iframe|object|embed|applet|meta|link)\b[^>]*>/gi, '')
+    .trim();
+}
+
+export function sanitizeInput(req, res, next) {
+  if (req.body && typeof req.body === 'object') {
+    sanitizeObject(req.body);
   }
-  if (req.params) {
-    req.params = sanitizeNoSql(req.params);
+  if (req.query && typeof req.query === 'object') {
+    sanitizeObject(req.query);
+  }
+  if (req.params && typeof req.params === 'object') {
+    sanitizeObject(req.params);
   }
   next();
 }
 
-// Centralized safe error handler
-export function secureErrorHandler(err, req, res, next) {
-  const timestamp = new Date().toISOString();
-  console.error(`[${timestamp}] [Internal Server Error]`, {
-    path: req.originalUrl,
-    method: req.method,
-    ip: req.ip,
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
-  });
+function sanitizeObject(obj) {
+  for (const key of Object.keys(obj)) {
+    // Prototype pollution prevention
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+      delete obj[key];
+      continue;
+    }
 
-  const statusCode = err.status || err.statusCode || 500;
-  const isProd = process.env.NODE_ENV === 'production';
+    const val = obj[key];
+    if (typeof val === 'string') {
+      obj[key] = sanitizeString(val);
+    } else if (val && typeof val === 'object') {
+      sanitizeObject(val);
+    }
+  }
+}
 
-  res.status(statusCode).json({
-    error: isProd
-      ? statusCode === 500
-        ? 'An unexpected internal error occurred. Please contact support.'
-        : err.message
-      : err.message || 'Internal Server Error',
-    requestId: req.headers['x-request-id'] || undefined,
-  });
+/**
+ * 4. Email Validator
+ */
+export function isValidEmail(email) {
+  if (!email || typeof email !== 'string') return false;
+  if (email.length > 120) return false;
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+  return emailRegex.test(email);
+}
+
+/**
+ * 5. Dynamic CORS Origin Validator
+ */
+export function getCorsOptions() {
+  const allowedOriginsEnv = process.env.ALLOWED_ORIGINS;
+  const configuredOrigins = allowedOriginsEnv
+    ? allowedOriginsEnv.split(',').map((o) => o.trim())
+    : [];
+
+  return {
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, same-origin, or SSR)
+      if (!origin) return callback(null, true);
+
+      // In development, allow localhost on common dev ports
+      if (process.env.NODE_ENV !== 'production') {
+        if (/^http:\/\/localhost(:\d+)?$/.test(origin) || /^http:\/\/127\.0\.0\.1(:\d+)?$/.test(origin)) {
+          return callback(null, true);
+        }
+      }
+
+      // Check configured allowed origins
+      if (configuredOrigins.length > 0) {
+        if (configuredOrigins.includes(origin) || configuredOrigins.includes('*')) {
+          return callback(null, true);
+        }
+        return callback(new Error('Blocked by CORS policy: origin not allowed'));
+      }
+
+      // Default: allow origin
+      return callback(null, true);
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    maxAge: 86400, // 24 hours preflight cache
+  };
 }

@@ -1,122 +1,65 @@
 import express from 'express';
-import {
-  generateToken,
-  comparePassword,
-  hashPassword,
-  authenticateAdmin,
-  requireAdminRole,
-  checkAccountLockout,
-  recordFailedLogin,
-  resetFailedLogin,
-  dummyPasswordCheck,
-} from '../auth.js';
+import { generateToken, comparePassword, hashPassword, authenticateAdmin } from '../auth.js';
 import { readLocalDB, writeLocalDB } from '../db.js';
-import { authLimiter } from '../middleware/security.js';
+import { loginRateLimiter } from '../middleware/security.js';
 
 const router = express.Router();
 
-// Admin Login with Brute-Force Rate Limiting & Account Lockout
-router.post('/login', authLimiter, async (req, res) => {
+router.post('/login', loginRateLimiter, async (req, res) => {
   try {
-    const { email, password } = req.body || {};
+    const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required.' });
     }
 
-    const normalizedEmail = String(email).toLowerCase().trim();
-
-    // 1. Check account lockout status
-    const lockout = checkAccountLockout(normalizedEmail);
-    if (lockout.isLocked) {
-      return res.status(429).json({
-        error: `Account access is temporarily locked due to multiple failed attempts. Please retry in ${lockout.remainingMinutes} minute(s).`,
-      });
-    }
-
     const db = readLocalDB();
     if (!db || !db.admin) {
-      return res.status(500).json({ error: 'Atelier database record unavailable.' });
+      return res.status(500).json({ error: 'Admin database not initialized.' });
     }
 
-    const dbAdminEmail = (db.admin.email || '').toLowerCase().trim();
-
-    // Prevent email enumeration via constant-time comparison
-    if (normalizedEmail !== dbAdminEmail) {
-      await dummyPasswordCheck(password);
-      recordFailedLogin(normalizedEmail);
-      return res.status(401).json({ error: 'Invalid administrative email or password.' });
+    let isMatch = false;
+    if (email.toLowerCase() === db.admin.email.toLowerCase()) {
+      isMatch = await comparePassword(password, db.admin.password);
+    } else {
+      // Constant-time dummy hash comparison to prevent username enumeration timing attacks
+      await comparePassword(password, '$2b$12$e85gS6W3b7xJc.dummyHashForConstantTimeVerification123');
     }
 
-    const isMatch = await comparePassword(password, db.admin.password);
     if (!isMatch) {
-      recordFailedLogin(normalizedEmail);
-      return res.status(401).json({ error: 'Invalid administrative email or password.' });
+      return res.status(401).json({ error: 'Invalid email or password.' });
     }
 
-    // Login successful: reset failed attempt counter
-    resetFailedLogin(normalizedEmail);
-
-    const tokenPayload = {
+    const token = generateToken({
       email: db.admin.email,
       name: db.admin.name,
-      role: db.admin.role || 'Agency Owner',
-      tokenVersion: db.admin.tokenVersion || 1,
-    };
-
-    const token = generateToken(tokenPayload);
-
-    // Set HttpOnly Secure SameSite cookie for defense-in-depth
-    res.cookie('shaadi_admin_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 2 * 60 * 60 * 1000, // 2 hours
-      path: '/',
+      role: db.admin.role,
     });
 
-    // Also return token in JSON response for frontend Authorization header support
     res.json({
       success: true,
       token,
       admin: {
         email: db.admin.email,
         name: db.admin.name,
-        role: db.admin.role || 'Agency Owner',
+        role: db.admin.role,
       },
     });
   } catch (err) {
-    console.error('[Login Error]', err);
-    res.status(500).json({ error: 'Authentication service encountered an unexpected error.' });
+    res.status(500).json({ error: 'Login server error: ' + err.message });
   }
 });
 
-// Admin Session Verification
-router.get('/me', authenticateAdmin, requireAdminRole, (req, res) => {
+router.get('/me', authenticateAdmin, (req, res) => {
   res.json({
     success: true,
-    admin: {
-      email: req.admin.email,
-      name: req.admin.name,
-      role: req.admin.role,
-    },
+    admin: req.admin,
   });
-});
-
-// Logout and Cookie Clearing
-router.post('/logout', (req, res) => {
-  res.clearCookie('shaadi_admin_token', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-  });
-  res.json({ success: true, message: 'Logged out successfully.' });
 });
 
 // Change Password - Admin Only & Protected
-router.put('/change-password', authenticateAdmin, requireAdminRole, async (req, res) => {
+router.put('/change-password', authenticateAdmin, async (req, res) => {
   try {
-    const { currentPassword, newPassword, confirmPassword } = req.body || {};
+    const { currentPassword, newPassword, confirmPassword } = req.body;
 
     if (!currentPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({ error: 'All password fields are required.' });
@@ -146,8 +89,8 @@ router.put('/change-password', authenticateAdmin, requireAdminRole, async (req, 
     }
 
     // Strong password policy
-    if (newPassword.length < 10) {
-      return res.status(400).json({ error: 'New password must be at least 10 characters long.' });
+    if (newPassword.length < 8) {
+      return res.status(400).json({ error: 'New password must be at least 8 characters long.' });
     }
     if (!/[A-Z]/.test(newPassword)) {
       return res.status(400).json({ error: 'New password must contain at least one uppercase letter (A-Z).' });
@@ -159,14 +102,13 @@ router.put('/change-password', authenticateAdmin, requireAdminRole, async (req, 
       return res.status(400).json({ error: 'New password must contain at least one digit (0-9).' });
     }
     if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(newPassword)) {
-      return res.status(400).json({ error: 'New password must contain at least one special character (!@#$%^&*).' });
+      return res.status(400).json({ error: 'New password must contain at least one special character (e.g. !@#$%^&*).' });
     }
 
-    // Hash and persist new password with work factor 12
+    // Hash and persist new password
     const newHashedPassword = await hashPassword(newPassword);
     db.admin.password = newHashedPassword;
     db.admin.passwordChangedAt = new Date().toISOString();
-    db.admin.tokenVersion = (db.admin.tokenVersion || 1) + 1; // Invalidate older sessions
     writeLocalDB(db);
 
     // Issue refreshed token
@@ -174,15 +116,6 @@ router.put('/change-password', authenticateAdmin, requireAdminRole, async (req, 
       email: db.admin.email,
       name: db.admin.name,
       role: db.admin.role,
-      tokenVersion: db.admin.tokenVersion,
-    });
-
-    res.cookie('shaadi_admin_token', freshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 2 * 60 * 60 * 1000,
-      path: '/',
     });
 
     res.json({
@@ -191,9 +124,12 @@ router.put('/change-password', authenticateAdmin, requireAdminRole, async (req, 
       token: freshToken,
     });
   } catch (err) {
-    console.error('[Change Password Error]', err);
-    res.status(500).json({ error: 'Failed to update credentials. Please try again.' });
+    res.status(500).json({ error: 'Failed to change password: ' + err.message });
   }
+});
+
+router.post('/logout', (req, res) => {
+  res.json({ success: true, message: 'Logged out successfully.' });
 });
 
 export default router;
