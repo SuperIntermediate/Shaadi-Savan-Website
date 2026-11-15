@@ -1,30 +1,26 @@
 {
   "admin": {
     "email": "admin@shaadisavan.com",
-    "password": "$2b$10$jQ4UKaic/QsKIN8DVDZeKONce.tlalJoqqHiGg5M3ZWjTyQgwnlRO",
+    "password": "$2b$10$uV62w0n5MJDVNV31Tsm9r.ZC1WBM.jxZpL15AMe9M1bKlRx0TftGa",
     "name": "Aditya & Gayatri",
-    "role": "Agency Owner",
-    "passwordChangedAt": "2026-11-14T13:43:39.407Z"
+    "role": "Agency Owner"
   },
   "settings": {
     "brandName": "SHAADI-SAVAN",
     "tagline": "Every wedding has a story. Let yours live forever.",
     "logoUrl": "/assets/aistudio/Elegant_Gold_Shaadi-Savan_Emblem_d563beae.png",
-    "contactEmail": "ShaadiSavan@gmail.com",
+    "contactEmail": "studio@shaadisavan.com",
     "phone": "+91 98200 11223",
     "whatsapp": "+919820011223",
     "instagramUrl": "https://instagram.com/shaadisavan",
     "youtubeUrl": "https://youtube.com/@shaadisavan",
-    "locations": "Jaripatka, Nagpur",
-    "seoTitle": "Shaadi-Savan â€” Cinematic Wedding Photography & Films",
+    "locations": "Colaba Atelier, Mumbai & Lake Pichola, Udaipur",
+    "seoTitle": "Shaadi-Savan — Cinematic Wedding Photography & Films",
     "seoDescription": "Documentary wedding photography and heirloom cinema capturing authentic Indian celebrations across Mumbai, Udaipur, Jaipur and worldwide.",
-    "ogImageUrl": "/assets/images/wedding_jaipur_couple_1794571322579.jpg",
-    "bookingHeadline": "Let's Create Something Eternal Together.",
-    "bookingDescription": "We accept a strictly limited number of commissions each season to give each couple unhurried artistic focus.",
-    "calendarStatus": "2026 Season: Limited Fall and Winter dates available."
+    "ogImageUrl": "/assets/images/wedding_jaipur_couple_1794571322579.jpg"
   },
   "hero": {
-    "headline": "Some moments last \na second.\nSome last forever.",
+    "headline": "Some moments last a second.\nSome last forever.",
     "supportingText": "We capture the stories that stay with you.",
     "videoUrl": "/wedding_video_frames_30fps/frame_000001.jpg",
     "posterUrl": "/assets/images/wedding_udaipur_palace_1794571321843.jpg",
@@ -32,14 +28,14 @@
     "duration": "00:00:12:12",
     "framesCount": 300,
     "isPublished": true,
-    "lastUpdated": "2026-11-15T10:49:56.730Z"
+    "lastUpdated": "2026-11-15T15:51:46.382Z"
   },
   "philosophy": {
     "number": "02",
     "title": "The Philosophy",
     "headline": "A wedding is more than a celebration. It is a thousand little emotions, unspoken promises, stolen glances and moments that deserve to live forever.",
     "paragraphs": [
-      "At Shaadi-Savan, we believe the truest photographs happen in the spaces between the scheduleâ€”a motherâ€™s quiet embrace before the baraat arrives, the tremor of hands during pheras, and laughter shared beneath courtyard shade.",
+      "At Shaadi-Savan, we believe the truest photographs happen in the spaces between the schedule—a mother’s quiet embrace before the baraat arrives, the tremor of hands during pheras, and laughter shared beneath courtyard shade.",
       "Founded between Mumbai and Udaipur, our collective works unobtrusively with natural light, warm film aesthetics, and patient documentary observation so your heirloom gallery feels alive decades from today."
     ],
     "stats": [
@@ -56,9 +52,9 @@
         "value": "India & Destination"
       }
     ],
-    "photoUrl": "/uploads/_indianbride__bride__beautyofindianbride__photoshootideas__bridephotoshoot__brideaesthetics_1794677251357.jpg",
-    "caption": "Unscripted Morning Embrace Â· Chennai",
-    "exif": "35mm f/1.4 Â· Natural Light"
+    "photoUrl": "/assets/images/philosophy_emotional_hug_1794655081817.jpg",
+    "caption": "Unscripted Morning Embrace · Chennai",
+    "exif": "35mm f/1.4 · Natural Light"
   },
   "stories": [
     {
@@ -67,7 +63,7 @@
       "title": "Echoes Across Lake Pichola",
       "coupleNames": "Meera & Aarav",
       "location": "Taj Lake Palace, Udaipur",
-      "weddingDate": "Nov 14â€“17, 2025",
+      "weddingDate": "Nov 14–17, 2025",
       "category": "Palace Destination",
       "coverImage": "/assets/images/wedding_udaipur_palace_1794571321843.jpg",
       "gallery": [
@@ -80,7 +76,7 @@
       "filmDuration": "08:42",
       "isPublished": true,
       "order": 1,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     },
     {
       "id": "story-2",
@@ -88,7 +84,7 @@
       "title": "Amber Glow at Rambagh",
       "coupleNames": "Rhea & Devansh",
       "location": "Rambagh Courtyard, Jaipur",
-      "weddingDate": "Dec 02â€“05, 2025",
+      "weddingDate": "Dec 02–05, 2025",
       "category": "Royal Heritage",
       "coverImage": "/assets/images/wedding_jaipur_couple_1794571322579.jpg",
       "gallery": [
@@ -97,11 +93,11 @@
         "/assets/images/wedding_bridal_detail_1794571323084.jpg",
         "/assets/images/moment_reception_toast_1794655081543.jpg"
       ],
-      "description": "A celebration grounded in marigold heritageâ€”daytime baithak music beneath bougainvillea archways and a sangeet evening charged with joyful family camaraderie.",
+      "description": "A celebration grounded in marigold heritage—daytime baithak music beneath bougainvillea archways and a sangeet evening charged with joyful family camaraderie.",
       "filmDuration": "11:15",
       "isPublished": true,
       "order": 2,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     },
     {
       "id": "story-3",
@@ -109,7 +105,7 @@
       "title": "Coastal Courtyard Vows",
       "coupleNames": "Ananya & Kabir",
       "location": "The Tamarind Grove, Alibaug",
-      "weddingDate": "Jan 22â€“24, 2026",
+      "weddingDate": "Jan 22–24, 2026",
       "category": "Intimate Coastal",
       "coverImage": "/assets/images/wedding_haldi_celebration_1794571322283.jpg",
       "gallery": [
@@ -121,7 +117,7 @@
       "filmDuration": "07:30",
       "isPublished": true,
       "order": 3,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     },
     {
       "id": "story-4",
@@ -129,7 +125,7 @@
       "title": "Blue City Blue Hour",
       "coupleNames": "Priya & Siddharth",
       "location": "Umaid Bhawan, Jodhpur",
-      "weddingDate": "Feb 10â€“13, 2026",
+      "weddingDate": "Feb 10–13, 2026",
       "category": "Royal Heritage",
       "coverImage": "/assets/images/wedding_sangeet_night_1794571324278.jpg",
       "gallery": [
@@ -141,7 +137,7 @@
       "filmDuration": "09:20",
       "isPublished": true,
       "order": 4,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     }
   ],
   "services": [
@@ -150,7 +146,7 @@
       "title": "Wedding Photography",
       "tag": "Editorial & Documentary",
       "description": "Unhurried, candid documentation with dual lead photographers, medium-format natural portraits, and archival color grading.",
-      "deliverables": "800+ Retouched Photographs Â· Private Cloud Vault Â· Curated Slideshow",
+      "deliverables": "800+ Retouched Photographs · Private Cloud Vault · Curated Slideshow",
       "image": "/assets/images/wedding_jaipur_couple_1794571322579.jpg",
       "order": 1,
       "isPublished": true
@@ -160,7 +156,7 @@
       "title": "Cinematic Wedding Films",
       "tag": "Widescreen 4K Storytelling",
       "description": "Motion poetry directed with authentic live sound design, intimate couple vows, and masterfully edited heirloom featurettes.",
-      "deliverables": "12â€“18 Min Feature Film Â· 3 Min Teaser Reel Â· Raw Speeches & Vows",
+      "deliverables": "12–18 Min Feature Film · 3 Min Teaser Reel · Raw Speeches & Vows",
       "image": "/assets/images/film_cinema_still_1794655082919.jpg",
       "order": 2,
       "isPublished": true
@@ -170,7 +166,7 @@
       "title": "Pre-Wedding Photography",
       "tag": "Heritage & Environmental",
       "description": "A relaxed half-day exploration before the celebration in an architectural haveli or peaceful natural landscape.",
-      "deliverables": "75 Curated Frames Â· Styling Consultation Â· 4K Concept Teaser",
+      "deliverables": "75 Curated Frames · Styling Consultation · 4K Concept Teaser",
       "image": "/assets/images/story_prewedding_lake_1794655081253.jpg",
       "order": 3,
       "isPublished": true
@@ -180,7 +176,7 @@
       "title": "Destination Weddings",
       "tag": "Global Heritage Commissions",
       "description": "Complete multi-day travel crew handling locations across Rajasthan, Goa, Kerala, Italy, and international destinations.",
-      "deliverables": "Custom Multi-Day Travel Kit Â· Same-Day Preview Cut Â· Dedicated Producer",
+      "deliverables": "Custom Multi-Day Travel Kit · Same-Day Preview Cut · Dedicated Producer",
       "image": "/assets/images/wedding_udaipur_palace_1794571321843.jpg",
       "order": 4,
       "isPublished": true
@@ -191,10 +187,10 @@
       "id": "ch-1",
       "title": "Morning Haldi",
       "ritual": "Auspicious Turmeric Blessings",
-      "timeOfDay": "09:30 AM Â· Sunlight Courtyard",
+      "timeOfDay": "09:30 AM · Sunlight Courtyard",
       "location": "Jaipur & Udaipur",
       "description": "Sunlight slicing through courtyard trees, bursts of marigold petals, yellow laughter, and candid family blessings.",
-      "image": "/uploads/PETAL_____Indian_Wedding___Celebration_House_1794664528849.jpg",
+      "image": "/assets/images/wedding_haldi_celebration_1794571322283.jpg",
       "order": 1,
       "isPublished": true
     },
@@ -202,10 +198,10 @@
       "id": "ch-2",
       "title": "Mehendi Rituals",
       "ritual": "Delicate Henna & Folk Melodies",
-      "timeOfDay": "02:00 PM Â· Shaded Verandah",
+      "timeOfDay": "02:00 PM · Shaded Verandah",
       "location": "Udaipur Palaces",
       "description": "Quiet moments of intricate henna application, gentle teasing from sisters, and quiet cups of cardamom chai.",
-      "image": "/uploads/____The_Art_of_Celebration_____1794664540057.jpg",
+      "image": "/assets/images/wedding_bridal_detail_1794571323084.jpg",
       "order": 2,
       "isPublished": true
     },
@@ -213,10 +209,10 @@
       "id": "ch-3",
       "title": "Sangeet Celebration",
       "ritual": "Euphoric Dance & Musical Toasts",
-      "timeOfDay": "08:00 PM Â· Illuminated Lawns",
+      "timeOfDay": "08:00 PM · Illuminated Lawns",
       "location": "Palace Gardens",
       "description": "Vibrant stage performances, grandmother leading traditional dholak choruses, and uninhibited midnight dancing.",
-      "image": "/uploads/4593179169973510400_1794664884793.jpg",
+      "image": "/assets/images/wedding_sangeet_night_1794571324278.jpg",
       "order": 3,
       "isPublished": true
     },
@@ -224,10 +220,10 @@
       "id": "ch-4",
       "title": "Sacred Ceremony",
       "ritual": "Vedic Pheras by Sacred Fire",
-      "timeOfDay": "06:00 PM Â· Twilight Mandap",
+      "timeOfDay": "06:00 PM · Twilight Mandap",
       "location": "Heritage Lake Courtyard",
       "description": "The solemn chime of Vedic chants, exchanged varmalas beneath fragrant tuberose garlands, and the silent look between bride and groom.",
-      "image": "/uploads/Hindu_Wedding_Sacred_Fire_Ceremony___Traditional_Photography___Deva_Studio_1794664720455.jpg",
+      "image": "/assets/images/wedding_pheras_mandap_1794571324735.jpg",
       "order": 4,
       "isPublished": true
     },
@@ -235,10 +231,10 @@
       "id": "ch-5",
       "title": "Midnight Reception",
       "ritual": "Toasts, Revelry & Starlight",
-      "timeOfDay": "10:30 PM Â· Ballroom Pavilion",
+      "timeOfDay": "10:30 PM · Ballroom Pavilion",
       "location": "Colonnaded Pavilion",
       "description": "Emotional champagne toasts from childhood friends, intimate slow dances, and an affectionate send-off under sparklers.",
-      "image": "/uploads/Starlit_White_Floral_Mandap_with_Candlelit_Aisle____1794664730294.jpg",
+      "image": "/assets/images/moment_reception_toast_1794655081543.jpg",
       "order": 5,
       "isPublished": true
     }
@@ -252,7 +248,7 @@
       "year": "2025",
       "duration": "08:42",
       "posterImage": "/assets/images/film_cinema_still_1794655082919.jpg",
-      "videoUrl": "/uploads/Continuous_camera_shot_wedding_film_0d909443_1080p_1794664937943.mp4",
+      "videoUrl": "/wedding_video_frames_30fps/frame_000001.jpg",
       "storyBlurb": "Spoken letters exchanged at sunrise across the Pichola lake waters, accompanied by gentle acoustic sarangi arrangements.",
       "isPublished": true,
       "order": 1
@@ -290,8 +286,8 @@
       "couple": "Meera & Aarav Singhania",
       "venue": "Taj Lake Palace, Udaipur",
       "coverage": "3-Day Heritage Commission",
-      "quote": "Watching our wedding film for the first time felt like stepping back inside our own hearts. They never asked us to pose stifflyâ€”they simply noticed everything that mattered.",
-      "photo": "/uploads/download_1794682170744.jpg",
+      "quote": "Watching our wedding film for the first time felt like stepping back inside our own hearts. They never asked us to pose stiffly—they simply noticed everything that mattered.",
+      "photo": "/assets/images/wedding_udaipur_palace_1794571321843.jpg",
       "rating": 5,
       "isPublished": true,
       "order": 1
@@ -317,319 +313,50 @@
       "rating": 5,
       "isPublished": true,
       "order": 3
-    },
-    {
-      "id": "test-1794687078518",
-      "couple": "Anjali & Tanishq",
-      "venue": "Jaipur",
-      "coverage": "3-Day Heritage Commission",
-      "quote": "This was really amazing!",
-      "photo": "/uploads/4593179169973510400_1794687071464.jpg",
-      "rating": 4,
-      "isPublished": true,
-      "order": 4
-    },
-    {
-      "id": "test-1794687647774",
-      "couple": "anbvasghdv",
-      "venue": "sbjhfbsd",
-      "coverage": "3-Day Heritage Commission",
-      "quote": "ashdvsajnm wbgav wji huhwakn qwhwekn akh a",
-      "photo": "/uploads/Haldi_Time_idea_s________fun_1794687632622.jpg",
-      "rating": 2,
-      "isPublished": true,
-      "order": 5
     }
   ],
   "enquiries": [
-    {
-      "id": "enq-1794735606566",
-      "clientName": "Priya & Rohan",
-      "email": "priya.rohan@example.com",
-      "phone": "+91 98200 55555",
-      "weddingDate": "Dec 2026",
-      "location": "",
-      "weddingType": "Heritage Wedding",
-      "service": "Full Heritage Commission",
-      "message": "Looking for heirloom photography.",
-      "status": "New",
-      "submittedAt": "2026-11-15T09:40:06.566Z"
-    },
-    {
-      "id": "enq-1794735606540",
-      "clientName": "[object Object]",
-      "email": "attacker@example.com",
-      "phone": "",
-      "weddingDate": "",
-      "location": "",
-      "weddingType": "Heritage Wedding",
-      "service": "Full Heritage Commission",
-      "message": "",
-      "status": "New",
-      "submittedAt": "2026-11-15T09:40:06.540Z"
-    },
     {
       "id": "enq-101",
       "clientName": "Sunaina & Vivaan Kapur",
       "email": "sunaina.kapur@gmail.com",
       "phone": "+91 98199 44321",
-      "weddingDate": "Nov 20â€“23, 2026",
+      "weddingDate": "Nov 20–23, 2026",
       "location": "Umaid Bhawan Palace, Jodhpur",
       "weddingType": "Heritage Destination (350 Guests)",
       "service": "Wedding Photography + Cinematic Films",
       "message": "We are planning a 4-day royal wedding in Jodhpur and fell in love with your candid storytelling approach. Looking forward to discussing dates.",
       "status": "New",
-      "submittedAt": "2026-11-14T10:05:10.703Z"
+      "submittedAt": "2026-11-15T12:51:46.385Z"
     },
     {
       "id": "enq-102",
       "clientName": "Tanya & Rishabh Verma",
       "email": "tanya.verma@outlook.com",
       "phone": "+91 98201 55678",
-      "weddingDate": "Dec 12â€“14, 2026",
+      "weddingDate": "Dec 12–14, 2026",
       "location": "The Leela Palace, Udaipur",
       "weddingType": "Lakeside Celebration (200 Guests)",
       "service": "Cinematic Wedding Films",
       "message": "Heard about Shaadi-Savan from our cousins Meera & Aarav! Would love to check if your team is available for our December weekend.",
       "status": "Contacted",
-      "submittedAt": "2026-11-13T13:05:10.703Z"
+      "submittedAt": "2026-11-14T15:51:46.385Z"
     },
     {
       "id": "enq-103",
       "clientName": "Natasha & Rohan Batra",
       "email": "natasha.batra@yahoo.com",
       "phone": "+91 99300 77890",
-      "weddingDate": "Jan 16â€“18, 2027",
+      "weddingDate": "Jan 16–18, 2027",
       "location": "Villa Balbiano, Lake Como, Italy",
       "weddingType": "International Destination (120 Guests)",
       "service": "Full Heritage Commission (Photo + Film + Analog)",
       "message": "Destination wedding in Lake Como. We want the warmth of Indian traditions captured with editorial documentary intimacy.",
       "status": "In Discussion",
-      "submittedAt": "2026-11-12T13:05:10.703Z"
+      "submittedAt": "2026-11-13T15:51:46.385Z"
     }
   ],
   "media": [
-    {
-      "id": "med-1794687632631",
-      "title": "anbvasghdv Portrait",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/Haldi_Time_idea_s________fun_1794687632622.jpg",
-      "url": "/uploads/Haldi_Time_idea_s________fun_1794687632622.jpg",
-      "thumbnailUrl": "/uploads/Haldi_Time_idea_s________fun_1794687632622.jpg",
-      "category": "Portraits",
-      "altText": "Haldi Time idea's ð¡ & fun.jpg",
-      "size": "183.5 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T20:20:32.632Z"
-    },
-    {
-      "id": "med-1794687071471",
-      "title": "Anjali & Tanishq Portrait",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/4593179169973510400_1794687071464.jpg",
-      "url": "/uploads/4593179169973510400_1794687071464.jpg",
-      "thumbnailUrl": "/uploads/4593179169973510400_1794687071464.jpg",
-      "category": "Portraits",
-      "altText": "4593179169973510400.jpg",
-      "size": "29.3 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T20:11:11.472Z"
-    },
-    {
-      "id": "med-1794682170751",
-      "title": "Meera & Aarav Singhania Portrait",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/download_1794682170744.jpg",
-      "url": "/uploads/download_1794682170744.jpg",
-      "thumbnailUrl": "/uploads/download_1794682170744.jpg",
-      "category": "Portraits",
-      "altText": "download.jpg",
-      "size": "129.7 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T18:49:30.751Z"
-    },
-    {
-      "id": "med-1794682155792",
-      "title": "Couple Portrait",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/download_1794682155777.jpg",
-      "url": "/uploads/download_1794682155777.jpg",
-      "thumbnailUrl": "/uploads/download_1794682155777.jpg",
-      "category": "Portraits",
-      "altText": "download.jpg",
-      "size": "129.7 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T18:49:15.792Z"
-    },
-    {
-      "id": "med-1794677251367",
-      "title": "Philosophy Photo - #indianbride #bride #beautyofindianbride #photoshootideas #bridephotoshoot #brideaesthetics",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/_indianbride__bride__beautyofindianbride__photoshootideas__bridephotoshoot__brideaesthetics_1794677251357.jpg",
-      "url": "/uploads/_indianbride__bride__beautyofindianbride__photoshootideas__bridephotoshoot__brideaesthetics_1794677251357.jpg",
-      "thumbnailUrl": "/uploads/_indianbride__bride__beautyofindianbride__photoshootideas__bridephotoshoot__brideaesthetics_1794677251357.jpg",
-      "category": "Weddings",
-      "altText": "#indianbride #bride #beautyofindianbride #photoshootideas #bridephotoshoot #brideaesthetics.jpg",
-      "size": "152.7 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T17:27:31.368Z"
-    },
-    {
-      "id": "med-1794671050266",
-      "title": "#indianbride #bride #beautyofindianbride #photoshootideas #bridephotoshoot #brideaesthetics",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/_indianbride__bride__beautyofindianbride__photoshootideas__bridephotoshoot__brideaesthetics_1794671050257.jpg",
-      "url": "/uploads/_indianbride__bride__beautyofindianbride__photoshootideas__bridephotoshoot__brideaesthetics_1794671050257.jpg",
-      "thumbnailUrl": "/uploads/_indianbride__bride__beautyofindianbride__photoshootideas__bridephotoshoot__brideaesthetics_1794671050257.jpg",
-      "category": "Weddings",
-      "altText": "#indianbride #bride #beautyofindianbride #photoshootideas #bridephotoshoot #brideaesthetics.jpg",
-      "size": "152.7 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T15:44:10.267Z"
-    },
-    {
-      "id": "med-1794664938140",
-      "title": "Echoes Across Lake Pichola Poster",
-      "mediaType": "video",
-      "mediaUrl": "/uploads/Continuous_camera_shot_wedding_film_0d909443_1080p_1794664937943.mp4",
-      "url": "/uploads/Continuous_camera_shot_wedding_film_0d909443_1080p_1794664937943.mp4",
-      "thumbnailUrl": "/uploads/Continuous_camera_shot_wedding_film_0d909443_1080p_1794664937943.mp4",
-      "category": "Films",
-      "altText": "Continuous_camera_shot_wedding_film_0d909443_1080p.mp4",
-      "size": "9678.9 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T14:02:18.140Z"
-    },
-    {
-      "id": "med-1794664884798",
-      "title": "Sangeet Celebration Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/4593179169973510400_1794664884793.jpg",
-      "url": "/uploads/4593179169973510400_1794664884793.jpg",
-      "thumbnailUrl": "/uploads/4593179169973510400_1794664884793.jpg",
-      "category": "Chapters",
-      "altText": "4593179169973510400.jpg",
-      "size": "29.3 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T14:01:24.798Z"
-    },
-    {
-      "id": "med-1794664730300",
-      "title": "Midnight Reception Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/Starlit_White_Floral_Mandap_with_Candlelit_Aisle____1794664730294.jpg",
-      "url": "/uploads/Starlit_White_Floral_Mandap_with_Candlelit_Aisle____1794664730294.jpg",
-      "thumbnailUrl": "/uploads/Starlit_White_Floral_Mandap_with_Candlelit_Aisle____1794664730294.jpg",
-      "category": "Chapters",
-      "altText": "Starlit White Floral Mandap with Candlelit AisleÃ¢ÂœÂ¨.jpg",
-      "size": "183.8 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:58:50.300Z"
-    },
-    {
-      "id": "med-1794664720460",
-      "title": "Sacred Ceremony Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/Hindu_Wedding_Sacred_Fire_Ceremony___Traditional_Photography___Deva_Studio_1794664720455.jpg",
-      "url": "/uploads/Hindu_Wedding_Sacred_Fire_Ceremony___Traditional_Photography___Deva_Studio_1794664720455.jpg",
-      "thumbnailUrl": "/uploads/Hindu_Wedding_Sacred_Fire_Ceremony___Traditional_Photography___Deva_Studio_1794664720455.jpg",
-      "category": "Chapters",
-      "altText": "Hindu Wedding Sacred Fire Ceremony _ Traditional Photography _ Deva Studio.jpg",
-      "size": "60.2 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:58:40.460Z"
-    },
-    {
-      "id": "med-1794664540062",
-      "title": "Mehendi Rituals Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/____The_Art_of_Celebration_____1794664540057.jpg",
-      "url": "/uploads/____The_Art_of_Celebration_____1794664540057.jpg",
-      "thumbnailUrl": "/uploads/____The_Art_of_Celebration_____1794664540057.jpg",
-      "category": "Chapters",
-      "altText": "Ã¢ÂœÂ¨ The Art of Celebration Ã¢ÂœÂ¨.jpg",
-      "size": "67.8 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:55:40.062Z"
-    },
-    {
-      "id": "med-1794664528854",
-      "title": "Morning Haldi Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/PETAL_____Indian_Wedding___Celebration_House_1794664528849.jpg",
-      "url": "/uploads/PETAL_____Indian_Wedding___Celebration_House_1794664528849.jpg",
-      "thumbnailUrl": "/uploads/PETAL_____Indian_Wedding___Celebration_House_1794664528849.jpg",
-      "category": "Chapters",
-      "altText": "PETAL Ã¢Â€Â” Indian Wedding & Celebration House.jpg",
-      "size": "132.2 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:55:28.854Z"
-    },
-    {
-      "id": "med-1794664492236",
-      "title": "Sangeet Celebration Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/____The_Art_of_Celebration_____1794664492231.jpg",
-      "url": "/uploads/____The_Art_of_Celebration_____1794664492231.jpg",
-      "thumbnailUrl": "/uploads/____The_Art_of_Celebration_____1794664492231.jpg",
-      "category": "Chapters",
-      "altText": "Ã¢ÂœÂ¨ The Art of Celebration Ã¢ÂœÂ¨.jpg",
-      "size": "67.8 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:54:52.236Z"
-    },
-    {
-      "id": "med-1794664482820",
-      "title": "Mehendi Rituals Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/PETAL_____Indian_Wedding___Celebration_House_1794664482815.jpg",
-      "url": "/uploads/PETAL_____Indian_Wedding___Celebration_House_1794664482815.jpg",
-      "thumbnailUrl": "/uploads/PETAL_____Indian_Wedding___Celebration_House_1794664482815.jpg",
-      "category": "Chapters",
-      "altText": "PETAL Ã¢Â€Â” Indian Wedding & Celebration House.jpg",
-      "size": "132.2 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:54:42.820Z"
-    },
-    {
-      "id": "med-1794664154374",
-      "title": "Morning Haldi Photo",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/download_1794664154367.jpg",
-      "url": "/uploads/download_1794664154367.jpg",
-      "thumbnailUrl": "/uploads/download_1794664154367.jpg",
-      "category": "Chapters",
-      "altText": "download.jpg",
-      "size": "129.7 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:49:14.374Z"
-    },
-    {
-      "id": "med-1794664077379",
-      "title": "Continuous_camera_shot_wedding_film_0d909443_1080p",
-      "mediaType": "video",
-      "mediaUrl": "/uploads/Continuous_camera_shot_wedding_film_0d909443_1080p_1794664077078.mp4",
-      "url": "/uploads/Continuous_camera_shot_wedding_film_0d909443_1080p_1794664077078.mp4",
-      "thumbnailUrl": "/uploads/Continuous_camera_shot_wedding_film_0d909443_1080p_1794664077078.mp4",
-      "category": "Weddings",
-      "altText": "Continuous_camera_shot_wedding_film_0d909443_1080p.mp4",
-      "size": "9678.9 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:47:57.380Z"
-    },
-    {
-      "id": "med-1794664065123",
-      "title": "download",
-      "mediaType": "image",
-      "mediaUrl": "/uploads/download_1794664065089.jpg",
-      "url": "/uploads/download_1794664065089.jpg",
-      "thumbnailUrl": "/uploads/download_1794664065089.jpg",
-      "category": "Weddings",
-      "altText": "download.jpg",
-      "size": "129.7 KB",
-      "isPublished": true,
-      "createdAt": "2026-11-14T13:47:45.124Z"
-    },
     {
       "id": "med-1",
       "title": "Sandstone Archway Walk",
@@ -641,7 +368,7 @@
       "size": "978 KB",
       "dimensions": "1920x1080",
       "isPublished": true,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     },
     {
       "id": "med-2",
@@ -654,7 +381,7 @@
       "size": "888 KB",
       "dimensions": "1920x1080",
       "isPublished": true,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     },
     {
       "id": "med-3",
@@ -667,7 +394,7 @@
       "size": "1.09 MB",
       "dimensions": "1920x1080",
       "isPublished": true,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     },
     {
       "id": "med-4",
@@ -680,7 +407,7 @@
       "size": "998 KB",
       "dimensions": "1920x1080",
       "isPublished": true,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     },
     {
       "id": "med-5",
@@ -693,7 +420,7 @@
       "size": "848 KB",
       "dimensions": "1920x1080",
       "isPublished": true,
-      "createdAt": "2026-11-14T13:05:10.703Z"
+      "createdAt": "2026-11-15T15:51:46.385Z"
     }
   ]
 }
