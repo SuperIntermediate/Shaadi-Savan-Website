@@ -39,13 +39,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate, heroData: 
   };
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const scrollableDistance = rect.height - window.innerHeight;
-      if (scrollableDistance <= 0) return;
-      const progress = Math.min(1, Math.max(0, -rect.top / scrollableDistance));
-      setScrollProgress(progress);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const scrollableDistance = rect.height - window.innerHeight;
+            if (scrollableDistance > 0) {
+              const progress = Math.min(1, Math.max(0, -rect.top / scrollableDistance));
+              setScrollProgress(progress);
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     handleScroll();
