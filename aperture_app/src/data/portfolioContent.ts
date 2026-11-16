@@ -49,8 +49,8 @@ export const HERO_CONFIG = {
   // Subtitle / supporting narrative
   supportingText: 'We capture the stories that stay with you.',
 
-  // Hero Studio Atelier Address Tag (Change address here)
-  locationText: 'Shaadi-Savan Atelier · Jaripatka, Nagpur, Maharashtra',
+  // Hero Studio Address Tag (Change address here)
+  locationText: 'Shaadi-Savan · Jaripatka, Nagpur, Maharashtra',
 
   // 🎥 [CHANGE HERO VIDEO HERE] (Supports 2-3 minute MP4 or WebM video file or CDN URL)
   // Example: '/videos/hero_reel.mp4' or 'https://assets.mixkit.co/videos/preview/mixkit-bride-and-groom-walking-in-a-field-42999-large.mp4'
@@ -393,8 +393,8 @@ export const SERVICES_CONFIG = [
     ],
   },
   {
-    id: 'intimate-atelier',
-    title: 'The Intimate Atelier',
+    id: 'intimate-collection',
+    title: 'The Intimate Collection',
     subtitle: 'Quiet Celebrations & Elopements',
     duration: '1 to 2 Days Coverage',
     investment: 'Investment upon Consultation',
@@ -446,7 +446,7 @@ export const TESTIMONIALS_CONFIG = [
 ];
 
 /* =========================================================================================
- * 📍 SECTION 8: STUDIO ATELIER CONTACT & FOOTER SETTINGS
+ * 📍 SECTION 8: STUDIO CONTACT & FOOTER SETTINGS
  * ========================================================================================= */
 export const STUDIO_SETTINGS = {
   brandName: 'SHAADI-SAVAN',

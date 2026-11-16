@@ -179,13 +179,13 @@ export const COVERAGE_PACKAGES: CoveragePackage[] = [
     ],
   },
   {
-    id: 'destination-atelier',
+    id: 'destination-editorial',
     index: '03',
     name: 'Destination Editorial',
     duration: '4-Day Coverage · Global Travel',
     investment: '₹4,90,000',
     description:
-      'Dedicated visual atelier traveling anywhere in India or abroad with hybrid digital and 35mm analog film rolls.',
+      'Dedicated visual collective traveling anywhere in India or abroad with hybrid digital and 35mm analog film rolls.',
     deliverables: [
       'Full 6-Member Visual & Sound Crew',
       '4 Rolls of 35mm Kodak Portra Film',

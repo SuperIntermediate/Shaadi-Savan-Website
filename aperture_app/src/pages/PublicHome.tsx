@@ -241,7 +241,7 @@ export const PublicHome: React.FC = () => {
         <TestimonialsSection testimonials={testimonials} />
       </main>
 
-      {/* 08. Booking & Atelier Footer */}
+      {/* 08. Booking & Studio Footer */}
       <BookingFooterSection
         preselectedService={preselectedService}
         onNavigate={handleNavigate}

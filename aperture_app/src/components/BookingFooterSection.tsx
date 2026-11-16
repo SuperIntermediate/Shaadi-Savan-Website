@@ -251,7 +251,7 @@ export const BookingFooterSection: React.FC<BookingFooterSectionProps> = ({
                       Every wedding is approached as an archival heirloom. We invite you to begin the conversation for your dates, destination, and vision with our studio principals.
                     </p>
 
-                    {/* Atelier Value Badges */}
+                    {/* Studio Value Badges */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                       <div className="p-3.5 rounded-xl bg-black/40 border border-[#754C3D]/50">
                         <Clock className="w-4 h-4 text-[#C6A875] mb-2" />
@@ -460,7 +460,7 @@ export const BookingFooterSection: React.FC<BookingFooterSectionProps> = ({
               className="h-10 sm:h-12 w-auto object-contain brightness-125 contrast-105"
             />
             <p className="drop-shadow-sm text-xs sm:text-[13.5px] text-[#B9AD9A]">
-              © 2026 Shaadi-Savan Atelier. All Rights Reserved.
+              © 2026 Shaadi-Savan. All Rights Reserved.
             </p>
           </div>
           <div className="flex items-center gap-6">
