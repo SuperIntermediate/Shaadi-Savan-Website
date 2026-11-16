@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd aperture_app && npm install && npm run build",
+  "outputDirectory": "aperture_app/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
